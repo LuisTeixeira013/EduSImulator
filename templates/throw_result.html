@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Throw Max Height</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #3498db, #2c3e50); /* Gradient background */
+            color: #ecf0f1; /* Light text color */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .throw-box {
+            background-color: #2980b9; /* Darker blue for the rectangle */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for a cooler effect */
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #fff; /* White color for the heading */
+        }
+
+        p {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        span {
+            color: #f39c12; /* Yellow text color */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="throw-box">
+        <h1>Free Throw Max Height</h1>
+        <p>The maximum height reached is <span>{{ max_height }} meters</span></p>
+    </div>
+</body>
+</html>

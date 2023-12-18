@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Throw Simulation</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #3498db, #2c3e50); /* Gradient background */
+            color: #ecf0f1; /* Light text color */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .throw-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            background-color: #2980b9; /* Darker blue for the rectangle */
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for a cooler effect */
+        }
+
+        .throw-object {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #e74c3c; /* Red color for the object */
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="throw-container">
+        <div class="throw-object" id="thrown-object"></div>
+    </div>
+
+    <script>
+        // Get initial speed and angle from Django context
+        const initialSpeed = {{ initial_speed }};
+        const launchAngle = {{ angle }};
+        
+        // Calculate initial velocity components
+        const initialVelocityX = initialSpeed * Math.cos((launchAngle * Math.PI) / 180);
+        const initialVelocityY = initialSpeed * Math.sin((launchAngle * Math.PI) / 180);
+
+        // Simulation parameters
+        const gravityAcceleration = 9.8; // m/s^2
+        const timeStep = 0.05; // seconds
+
+        // Initialize object position and velocity
+        let objectPositionX = 0;
+        let objectPositionY = 0;
+        let objectVelocityX = initialVelocityX;
+        let objectVelocityY = initialVelocityY;
+
+        // Reference to the thrown object
+        const thrownObject = document.getElementById('thrown-object');
+
+        // Function to update object position
+        function updateObjectPosition() {
+            // Update velocity components
+            objectVelocityY -= gravityAcceleration * timeStep;
+
+            // Update position components
+            objectPositionX += objectVelocityX * timeStep;
+            objectPositionY -= objectVelocityY * timeStep;
+
+            // Update object position
+            thrownObject.style.left = `${objectPositionX}px`;
+            thrownObject.style.bottom = `${objectPositionY}px`;
+
+            // Check if the object hits the ground
+            if (objectPositionY <= 0) {
+                clearInterval(simulationInterval); // Stop the simulation
+            }
+        }
+
+        // Start the simulation interval
+        const simulationInterval = setInterval(updateObjectPosition, timeStep * 1000);
+    </script>
+</body>
+</html>

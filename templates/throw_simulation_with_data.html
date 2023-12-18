@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Throw Simulation with Data</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .simulation-container {
+            text-align: center;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="simulation-container">
+        <h1>Free Throw Simulation</h1>
+
+        <!-- User input form -->
+        <form id="throwForm">
+            <label for="initialSpeed">Initial Speed:</label>
+            <input type="number" id="initialSpeed" name="initialSpeed" step="any" required>
+            <br>
+            <label for="angle">Launch Angle:</label>
+            <input type="number" id="angle" name="angle" step="any" required>
+            <br>
+            <button type="button" onclick="simulateThrow()">Simulate</button>
+        </form>
+
+        <!-- Chart container -->
+        <div class="chart-container">
+            <canvas id="throwChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+<script>
+    var throwChart;  // Global variable to store the chart instance
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('throwChart').getContext('2d');
+
+        throwChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Height vs Time',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    data: [],
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom'
+                    },
+                    y: {
+                        type: 'linear',
+                        position: 'left'
+                    }
+                }
+            }
+        });
+    });
+
+    function simulateThrow() {
+        // Retrieve user input
+        var initialSpeed = parseFloat(document.getElementById('initialSpeed').value);
+        var angle = parseFloat(document.getElementById('angle').value);
+
+        // AJAX request to get simulation data
+        // You'll need to implement the server endpoint for this
+        // Example: '/simulate_throw?initial_speed=' + initialSpeed + '&angle=' + angle
+        fetch('/simulate_throw?initial_speed=' + initialSpeed + '&angle=' + angle)
+            .then(response => response.json())
+            .then(data => updateChart(data));
+    }
+
+    function updateChart(data) {
+        // Update chart data
+        throwChart.data.labels = data.time_values;
+        throwChart.data.datasets[0].data = data.y_values;
+        throwChart.update();  // Update the chart
+    }
+</script>
+
+</body>
+</html>
