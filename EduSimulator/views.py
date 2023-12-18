@@ -63,7 +63,7 @@ def simulate_throw(request):
         # Simulation parameters
         gravity_acceleration = 9.8
         angle_rad = math.radians(angle)
-        time_step = 0.01  # time step for the simulation
+        time_step = 0.1  # time step for the simulation
 
         # Simulate the throw and calculate x, y, and time arrays
         x_values, y_values, time_values = simulate_throw_trajectory(initial_speed, angle_rad, gravity_acceleration,

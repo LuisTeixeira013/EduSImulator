@@ -14,17 +14,80 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(to right, #141e30, #243b55);
-            color: #ecf0f1;
+            background-color: #f0f0f0;
+            color: #333;
             font-family: 'Arial', sans-serif;
         }
 
         .simulation-container {
             text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #3498db;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="range"] {
+            width: 80%;
+            margin: 5px 0;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3498db;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        span {
+            display: inline-block;
+            margin-top: 5px;
+            color: #777;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
         }
 
         .chart-container {
             margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -51,71 +114,68 @@
         </div>
     </div>
 
-<script>
-    let throwChart;  // Global variable to store the chart instance
+    <script>
+        let throwChart;  // Global variable to store the chart instance
 
-    function updateSliderValue(sliderId, outputId) {
-        let slider = document.getElementById(sliderId);
-        let output = document.getElementById(outputId);
-        output.innerHTML = slider.value;
-    }
-    
-    {#updateSliderValue('initialSpeed', 'initialSpeedValue');#}
-    {#updateSliderValue('angle', 'angleValue');#}
-    
-    document.addEventListener('DOMContentLoaded', function () {
-        let ctx = document.getElementById('throwChart').getContext('2d');
-        updateSliderValue('initialSpeed', 'initialSpeedValue');
-        updateSliderValue('angle', 'angleValue');
-        simulateThrow();
+        function updateSliderValue(sliderId, outputId) {
+            let slider = document.getElementById(sliderId);
+            let output = document.getElementById(outputId);
+            output.innerHTML = slider.value;
+        }
 
-        throwChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Height vs Time',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    data: [],
-                    fill: false
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'linear',
-                        position: 'bottom'
-                    },
-                    y: {
-                        type: 'linear',
-                        position: 'left'
+        document.addEventListener('DOMContentLoaded', function () {
+            let ctx = document.getElementById('throwChart').getContext('2d');
+            updateSliderValue('initialSpeed', 'initialSpeedValue');
+            updateSliderValue('angle', 'angleValue');
+            simulateThrow();
+
+            throwChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Height vs Time',
+                        borderColor: '#3498db',
+                        borderWidth: 1,
+                        data: [],
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom'
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left'
+                        }
                     }
                 }
-            }
+            });
         });
-    });
 
-    function simulateThrow() {
-        // Retrieve user input
-        let initialSpeed = parseFloat(document.getElementById('initialSpeed').value);
-        let angle = parseFloat(document.getElementById('angle').value);
+        function simulateThrow() {
+            // Retrieve user input
+            let initialSpeed = parseFloat(document.getElementById('initialSpeed').value);
+            let angle = parseFloat(document.getElementById('angle').value);
 
-        // AJAX request to get simulation data
-        // You'll need to implement the server endpoint for this
-        // Example: '/simulate_throw?initial_speed=' + initialSpeed + '&angle=' + angle
-        fetch('/simulate_throw?initial_speed=' + initialSpeed + '&angle=' + angle)
-            .then(response => response.json())
-            .then(data => updateChart(data));
-    }
+            // AJAX request to get simulation data
+            // You'll need to implement the server endpoint for this
+            // Example: '/simulate_throw?initial_speed=' + initialSpeed + '&angle=' + angle
+            fetch('/simulate_throw?initial_speed=' + initialSpeed + '&angle=' + angle)
+                .then(response => response.json())
+                .then(data => updateChart(data));
+        }
 
-    function updateChart(data) {
-        // Update chart data
-        throwChart.data.labels = data.time_values;
-        throwChart.data.datasets[0].data = data.y_values;
-        throwChart.update();  // Update the chart
-    }
-</script>
+        function updateChart(data) {
+            // Update chart data
+            throwChart.data.labels = data.time_values;
+            throwChart.data.datasets[0].data = data.y_values;
+            throwChart.update();  // Update the chart
+        }
+    </script>
 
 </body>
 </html>
