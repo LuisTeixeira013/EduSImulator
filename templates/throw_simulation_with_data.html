@@ -35,10 +35,12 @@
         <!-- User input form -->
         <form id="throwForm">
             <label for="initialSpeed">Initial Speed:</label>
-            <input type="number" id="initialSpeed" name="initialSpeed" step="any" required>
+            <input type="range" id="initialSpeed" name="initialSpeed" min="0" max="100" step="1" value="50" oninput="updateSliderValue('initialSpeed', 'initialSpeedValue')">
+            <span id="initialSpeedValue">50</span>
             <br>
             <label for="angle">Launch Angle:</label>
-            <input type="number" id="angle" name="angle" step="any" required>
+            <input type="range" id="angle" name="angle" min="0" max="90" step="1" value="45" oninput="updateSliderValue('angle', 'angleValue')">
+            <span id="angleValue">45</span>
             <br>
             <button type="button" onclick="simulateThrow()">Simulate</button>
         </form>
@@ -50,10 +52,22 @@
     </div>
 
 <script>
-    var throwChart;  // Global variable to store the chart instance
+    let throwChart;  // Global variable to store the chart instance
 
+    function updateSliderValue(sliderId, outputId) {
+        let slider = document.getElementById(sliderId);
+        let output = document.getElementById(outputId);
+        output.innerHTML = slider.value;
+    }
+    
+    {#updateSliderValue('initialSpeed', 'initialSpeedValue');#}
+    {#updateSliderValue('angle', 'angleValue');#}
+    
     document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('throwChart').getContext('2d');
+        let ctx = document.getElementById('throwChart').getContext('2d');
+        updateSliderValue('initialSpeed', 'initialSpeedValue');
+        updateSliderValue('angle', 'angleValue');
+        simulateThrow();
 
         throwChart = new Chart(ctx, {
             type: 'line',
@@ -84,8 +98,8 @@
 
     function simulateThrow() {
         // Retrieve user input
-        var initialSpeed = parseFloat(document.getElementById('initialSpeed').value);
-        var angle = parseFloat(document.getElementById('angle').value);
+        let initialSpeed = parseFloat(document.getElementById('initialSpeed').value);
+        let angle = parseFloat(document.getElementById('angle').value);
 
         // AJAX request to get simulation data
         // You'll need to implement the server endpoint for this

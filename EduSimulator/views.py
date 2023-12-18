@@ -63,7 +63,7 @@ def simulate_throw(request):
         # Simulation parameters
         gravity_acceleration = 9.8
         angle_rad = math.radians(angle)
-        time_step = 0.01  # 1 second time step for the simulation
+        time_step = 0.01  # time step for the simulation
 
         # Simulate the throw and calculate x, y, and time arrays
         x_values, y_values, time_values = simulate_throw_trajectory(initial_speed, angle_rad, gravity_acceleration,
@@ -90,7 +90,7 @@ def simulate_throw_trajectory(initial_speed, launch_angle, gravity_acceleration,
     while True:
         # Calculate x, y, and time values for each time step
         x = initial_speed * math.cos(launch_angle) * time
-        y = (initial_speed * math.sin(launch_angle) * time) - (0.5 * gravity_acceleration * time ** 2)
+        y = max(0, (initial_speed * math.sin(launch_angle) * time) - (0.5 * gravity_acceleration * time ** 2))
 
         x_values.append(x)
         y_values.append(y)
@@ -99,7 +99,7 @@ def simulate_throw_trajectory(initial_speed, launch_angle, gravity_acceleration,
         time += time_step
 
         # Break the loop when the projectile hits the ground (y <= 0)
-        if y < 0:
+        if (y <= 0) and (time > time_step):
             break
 
     return x_values, y_values, time_values
